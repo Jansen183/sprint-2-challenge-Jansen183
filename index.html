@@ -5,34 +5,163 @@
   <title>Web Sprint 2 Challenge</title>
   <script id="challenge">
     // 👉 CHALLENGE 1
-    function profileActivation(profile, reason) {
-
+      function profileActivation(profile, reason) {
+  if (profile.active) {
+    // If the profile is currently active
+    if (reason === undefined) {
+      // No reason provided for deactivation
+      return "confirm status manually";
+    } else {
+      // Deactivate the profile with the provided reason
+      profile.active = false;
+      profile.reason = reason;
+      return profile;
     }
+  } else {
+    // If the profile is currently inactive
+    // Activate the profile and remove the reason
+    delete profile.reason;
+    profile.active = true;
+    return profile;  // Fix: Return the modified profile object
+  }
+}
 
     // 👉 CHALLENGE 2
     function mineSweeper(grid, x, y) {
+        // Check for invalid coordinates
+  if (x < 1 || x > 3 || y < 1 || y > 3) {
+    return "invalid coordinates";
+  }
 
+  // Get the value at the specified coordinates
+  const squareValue = grid[y - 1][x - 1];
+
+  // Evaluate the square value
+  if (squareValue === "🟥") {
+    return "🟥 💀"; // Landing on a mine
+  } else if (squareValue === "🟦") {
+    return "🟦 🥳"; // Landing on a safe spot
+  }
+
+  // Handle any unexpected cases
+  return "unknown outcome";
     }
+  
 
     // 👉 CHALLENGE 3
     function booleanize(obj) {
+      const result = {};
 
-    }
+for (const key in obj) {
+  // Check if property name exceeds 9 characters
+  if (key.length > 9) {
+    return "shorten all prop names to 9 chars or less";
+  }
+
+  // Transform values based on requirements
+  const value = obj[key];
+  if (value === 0) {
+    result[key] = false;
+  } else if (value === 1) {
+    result[key] = true;
+  } else if (value !== null) {
+    result[key] = value;
+  }
+  // If value is null, skip adding to result (delete key-value pair)
+}
+
+return result;
+}
+
+// Example 1
+let obj1 = {
+keyZero: 0,
+keyOne: 1,
+keyNull: null,
+keyTwo: 2
+};
+let result1 = booleanize(obj1);
+console.log(result1);
+
+// Example 2
+let obj2 = {
+veryLongPropertyName: 0,
+keyOne: 1
+};
+let result2 = booleanize(obj2);
+console.log(result2);
+
+
+    
 
     // 👉 CHALLENGE 4
     function scrub(text, forbidden) {
+       // Check if text is empty or there are no forbidden words
+  if (text === "" || forbidden.length === 0) {
+    return text;
+  }
 
+  // Split the text into an array of words
+  const words = text.split(" ");
+
+  // Replace forbidden words with "x" characters
+  const result = words.map(word => {
+    // Remove punctuation from the word
+    const cleanedWord = word.replace(/[^\w]/g, '');
+
+    // Check if the cleaned word is in the forbidden array
+    if (forbidden.includes(cleanedWord.toLowerCase())) {
+      // Replace each letter with "x"
+      return "x".repeat(cleanedWord.length);
+    } else {
+      return word;
     }
+  });
 
+  // Join the array back into a string
+  return result.join(" ");
+    }
     // 👉 CHALLENGE 5 (bonus, NOT graded)
     function normalizePhoneNumber(num) {
-
+        // Check if num is a string of 10 digits
+  if (/^\d{10}$/.test(num)) {
+    // Use template "(XXX) XXX-XXXX" and replace 'X' with digits from the input number
+    return `(${num.substring(0, 3)}) ${num.substring(3, 6)}-${num.substring(6)}`;
+  } else {
+    // Handle invalid input
+    console.error("Invalid phone number format");
+    return null;
+  }
     }
-
     // 👉 CHALLENGE 6 (bonus, NOT graded)
     function diceRolls() {
+        let throws = 0; // Total number of rolls
+  let counter = 0; // Consecutive number of sixes
 
+  while (true) {
+    const roll = Math.floor(Math.random() * 6) + 1; // Simulate rolling a six-sided die
+
+    // Check if the roll is a six
+    if (roll === 6) {
+      counter++;
+
+      // Check if three consecutive sixes are rolled
+      if (counter === 3) {
+        return throws; // Return the total number of rolls
+      }
+    } else {
+      counter = 0; // Reset consecutive sixes counter if a non-six is rolled
     }
+
+    throws++; // Increment the total number of rolls
+  }
+}
+
+// Example
+let result = diceRolls();
+console.log(result);
+
+    
 
     // 🧪 DO NOT make any changes below this line ===================
     globalThis.challengeVersion = 1
